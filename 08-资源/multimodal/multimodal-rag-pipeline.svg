@@ -1,0 +1,136 @@
+<svg viewBox="0 0 1180 760" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', sans-serif; }
+    .title { fill: #f8fafc; font-size: 20px; font-weight: 700; }
+    .subtitle { fill: #94a3b8; font-size: 11px; }
+    .box-title { fill: #ffffff; font-size: 12px; font-weight: 700; text-anchor: middle; }
+    .box-sub { fill: #cbd5e1; font-size: 9px; text-anchor: middle; }
+    .tiny { fill: #94a3b8; font-size: 8.5px; text-anchor: middle; }
+    .region { font-size: 10px; font-weight: 700; }
+  </style>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="760" fill="#0f172a"/>
+  <rect width="1180" height="760" fill="url(#grid)"/>
+
+  <text x="40" y="46" class="title">Multimodal RAG Pipeline</text>
+  <text x="40" y="66" class="subtitle">解析、对齐、索引、检索、生成、引用和评测缺一不可</text>
+
+  <rect x="38" y="94" width="1104" height="190" rx="12" fill="none" stroke="#22d3ee" stroke-dasharray="8,4"/>
+  <text x="56" y="116" fill="#22d3ee" class="region">Document Processing</text>
+
+  <g>
+    <rect x="78" y="154" width="145" height="74" rx="6" fill="#0f172a"/>
+    <rect x="78" y="154" width="145" height="74" rx="6" fill="rgba(8,51,68,0.42)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="150.5" y="183" class="box-title">Ingestion</text>
+    <text x="150.5" y="202" class="box-sub">PDF / Office / Image</text>
+  </g>
+  <g>
+    <rect x="278" y="154" width="145" height="74" rx="6" fill="#0f172a"/>
+    <rect x="278" y="154" width="145" height="74" rx="6" fill="rgba(6,78,59,0.42)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="350.5" y="183" class="box-title">Parsing</text>
+    <text x="350.5" y="202" class="box-sub">layout / table / OCR</text>
+  </g>
+  <g>
+    <rect x="478" y="154" width="145" height="74" rx="6" fill="#0f172a"/>
+    <rect x="478" y="154" width="145" height="74" rx="6" fill="rgba(120,53,15,0.32)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="550.5" y="183" class="box-title">Enrichment</text>
+    <text x="550.5" y="202" class="box-sub">caption / formula / graph</text>
+  </g>
+  <g>
+    <rect x="678" y="154" width="145" height="74" rx="6" fill="#0f172a"/>
+    <rect x="678" y="154" width="145" height="74" rx="6" fill="rgba(76,29,149,0.42)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="750.5" y="183" class="box-title">Artifacts</text>
+    <text x="750.5" y="202" class="box-sub">page / bbox / JSON</text>
+  </g>
+  <g>
+    <rect x="878" y="154" width="185" height="74" rx="6" fill="#0f172a"/>
+    <rect x="878" y="154" width="185" height="74" rx="6" fill="rgba(59,130,246,0.32)" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="970.5" y="183" class="box-title">Quality Gate</text>
+    <text x="970.5" y="202" class="box-sub">sample check / parser version</text>
+  </g>
+
+  <path d="M 228 191 L 270 191" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 428 191 L 470 191" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 628 191 L 670 191" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 828 191 L 870 191" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="38" y="328" width="1104" height="176" rx="12" fill="none" stroke="#a78bfa" stroke-dasharray="8,4"/>
+  <text x="56" y="350" fill="#a78bfa" class="region">Retrieval Layer</text>
+
+  <g>
+    <rect x="96" y="392" width="136" height="66" rx="6" fill="#0f172a"/>
+    <rect x="96" y="392" width="136" height="66" rx="6" fill="rgba(8,51,68,0.42)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="164" y="418" class="box-title">Text Index</text>
+    <text x="164" y="437" class="box-sub">paragraph / caption</text>
+  </g>
+  <g>
+    <rect x="290" y="392" width="136" height="66" rx="6" fill="#0f172a"/>
+    <rect x="290" y="392" width="136" height="66" rx="6" fill="rgba(6,78,59,0.42)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="358" y="418" class="box-title">Table Index</text>
+    <text x="358" y="437" class="box-sub">rows / columns / units</text>
+  </g>
+  <g>
+    <rect x="484" y="392" width="136" height="66" rx="6" fill="#0f172a"/>
+    <rect x="484" y="392" width="136" height="66" rx="6" fill="rgba(120,53,15,0.32)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="552" y="418" class="box-title">Image Index</text>
+    <text x="552" y="437" class="box-sub">page / figure embedding</text>
+  </g>
+  <g>
+    <rect x="678" y="392" width="136" height="66" rx="6" fill="#0f172a"/>
+    <rect x="678" y="392" width="136" height="66" rx="6" fill="rgba(76,29,149,0.42)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="746" y="418" class="box-title">Graph Index</text>
+    <text x="746" y="437" class="box-sub">section -> figure -> claim</text>
+  </g>
+  <g>
+    <rect x="872" y="392" width="170" height="66" rx="6" fill="#0f172a"/>
+    <rect x="872" y="392" width="170" height="66" rx="6" fill="rgba(59,130,246,0.32)" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="957" y="418" class="box-title">Evidence Pack</text>
+    <text x="957" y="437" class="box-sub">source / page / bbox / quote</text>
+  </g>
+
+  <path d="M 236 425 L 282 425" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 430 425 L 476 425" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 624 425 L 670 425" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 818 425 L 864 425" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="142" y="558" width="896" height="126" rx="12" fill="none" stroke="#34d399" stroke-dasharray="8,4"/>
+  <text x="160" y="580" fill="#34d399" class="region">Answering & Evaluation</text>
+
+  <g>
+    <rect x="202" y="612" width="160" height="56" rx="6" fill="#0f172a"/>
+    <rect x="202" y="612" width="160" height="56" rx="6" fill="rgba(6,78,59,0.42)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="282" y="635" class="box-title">Answer</text>
+    <text x="282" y="653" class="box-sub">claim + citation</text>
+  </g>
+  <g>
+    <rect x="432" y="612" width="160" height="56" rx="6" fill="#0f172a"/>
+    <rect x="432" y="612" width="160" height="56" rx="6" fill="rgba(136,19,55,0.42)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="512" y="635" class="box-title">Citation Check</text>
+    <text x="512" y="653" class="box-sub">does evidence support?</text>
+  </g>
+  <g>
+    <rect x="662" y="612" width="160" height="56" rx="6" fill="#0f172a"/>
+    <rect x="662" y="612" width="160" height="56" rx="6" fill="rgba(120,53,15,0.32)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="742" y="635" class="box-title">Eval Report</text>
+    <text x="742" y="653" class="box-sub">accuracy / grounding / cost</text>
+  </g>
+
+  <path d="M 957 462 C 930 540, 810 590, 826 638" fill="none" stroke="#fbbf24" stroke-width="1.6" marker-end="url(#arrow-amber)"/>
+  <path d="M 750 232 C 710 300, 670 345, 620 392" fill="none" stroke="#22d3ee" stroke-width="1.4" marker-end="url(#arrow-cyan)"/>
+  <path d="M 366 640 L 424 640" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 596 640 L 654 640" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+</svg>

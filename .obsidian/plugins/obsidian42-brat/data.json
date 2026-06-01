@@ -1,0 +1,23 @@
+{
+  "pluginList": [
+    "rien7/obsidian-colorful-tag"
+  ],
+  "pluginSubListFrozenVersion": [
+    {
+      "repo": "rien7/obsidian-colorful-tag",
+      "version": ""
+    }
+  ],
+  "themesList": [],
+  "updateAtStartup": true,
+  "updateThemesAtStartup": true,
+  "enableAfterInstall": true,
+  "loggingEnabled": false,
+  "loggingPath": "BRAT-log",
+  "loggingVerboseEnabled": false,
+  "debuggingMode": false,
+  "notificationsEnabled": true,
+  "personalAccessToken": "",
+  "selectLatestPluginVersionByDefault": false,
+  "allowIncompatiblePlugins": false
+}

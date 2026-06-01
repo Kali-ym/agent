@@ -1,0 +1,288 @@
+{
+  "main": {
+    "id": "b7af1f5ea2e774e4",
+    "type": "split",
+    "children": [
+      {
+        "id": "6b74b6d1204870b2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "14a8f7fb5c83ede7",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "308515e856ab1e77",
+    "type": "split",
+    "children": [
+      {
+        "id": "93acce3de78f9d65",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eed6439f078540b0",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "9b06f74e63465994",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "word",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "82b246512564cbbe",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 269.5
+  },
+  "right": {
+    "id": "90d63e1458f33f4f",
+    "type": "split",
+    "children": [
+      {
+        "id": "3d5846b1ea049aa6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "74f8b1d827805321",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "知识库/账号与资源/服务器账号.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "服务器账号 的反向链接列表"
+            }
+          },
+          {
+            "id": "62bd9360b827d4ef",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "知识库/账号与资源/服务器账号.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "服务器账号 的出链列表"
+            }
+          },
+          {
+            "id": "fbb66a5c211eb8b6",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "b1021e462117a24d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "资源库/账号与资源/服务器账号.md",
+                "followCursor": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "服务器账号 的大纲"
+            }
+          },
+          {
+            "id": "0ec62523690497fc",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "calendar"
+            }
+          },
+          {
+            "id": "41209c2f4fed0634",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "advanced-tables-toolbar"
+            }
+          },
+          {
+            "id": "5b97d4479e1c0fc4",
+            "type": "leaf",
+            "state": {
+              "type": "tasks_timeline_view",
+              "state": {},
+              "icon": "calendar-clock",
+              "title": "Tasks Timeline"
+            }
+          },
+          {
+            "id": "ca61bc817bd8d297",
+            "type": "leaf",
+            "state": {
+              "type": "tasks_timeline_view",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "tasks_timeline_view"
+            }
+          },
+          {
+            "id": "e2b1182b0d48ef6e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "857648b66b6835d9",
+            "type": "leaf",
+            "state": {
+              "type": "tasks_timeline_view",
+              "state": {},
+              "icon": "calendar-clock",
+              "title": "Tasks Timeline"
+            }
+          }
+        ],
+        "currentTab": 6
+      }
+    ],
+    "direction": "horizontal",
+    "width": 327.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "sheet-plus:创建 Excel 文件": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "templater-obsidian:Templater": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "obsidian42-brat:BRAT": false,
+      "obsidian-git:Open Git source control": false,
+      "periodic-notes:Open today": false
+    }
+  },
+  "active": "14a8f7fb5c83ede7",
+  "lastOpenFiles": [
+    "scripts/__pycache__/migrate-agentguide-to-vault.cpython-314.pyc.131734948468128",
+    "resources/training/qwen系列.pdf",
+    "resources/training/qwen-FIPO(1).pdf",
+    "resources/training/post_training_notes.pdf",
+    "resources/training/LLaMA系列完整笔记.pdf",
+    "resources/training/lcs_top10_人话版.pdf",
+    "resources/training/Efficient LLM Inference Systems, Algorithms & Production Engineering(1).pdf",
+    "resources/training/deepseek_v4_notes.md(1).pdf",
+    "resources/training/deepseek_notes.pdf",
+    "resources/training/DeepSeek-V4昇腾首发_基于CANN的高性能推理优化实践(1).pdf",
+    "resources/training/DeepSeek-V4-深度解读.pdf",
+    "resources/tools.md",
+    "resources/rag/vector-db.md",
+    "resources/rag/projects.md",
+    "resources/rag/papers/README.md",
+    "resources/rag/papers/multimodal_rag/README.md",
+    "resources/rag/papers/graphrag/README.md",
+    "resources/rag/papers/agentic_rag/README.md",
+    "resources/rag/papers/agentic_rag/agentic_rag.md",
+    "resources/rag/document-parsing.md",
+    "resources/multimodal/tools-and-projects.md",
+    "resources/multimodal/README.md",
+    "resources/multimodal/multimodal-rag-pipeline.svg",
+    "resources/multimodal/multimodal-rag-pipeline.md",
+    "resources/multimodal/evaluation-checklist.md",
+    "resources/learning-resources.md",
+    "resources/agent/README.md",
+    "resources/agent/papers/README.md",
+    "resources/agent/papers/data_synthesis/README.md",
+    "resources/agent/papers/agent_rl/Agent➕RL开源项目汇总.md",
+    "resources/agent/papers/agent_memory/一口气读完agent memory的21篇核心论文.md",
+    "resources/agent/papers/agent_memory/README.md",
+    "resources/agent/papers/agent_memory/Agent Memory 核心论文汇总.md",
+    "research/logo.svg",
+    "research/favicon.svg",
+    "external/InterviewGuide/tests/fixtures/knowledge_sample.md",
+    "external/InterviewGuide/tests/fixtures/company_sample.md",
+    "external/InterviewGuide/README.md",
+    "external/InterviewGuide/public/favicon.svg",
+    "external/InterviewGuide/plans/2026-02-26-interviewguide-v1-implementation-plan.md",
+    "_sources/original/AgentGuide/research/logo.svg",
+    "_sources/original/AgentGuide/research/favicon.svg",
+    "_sources/original/AgentGuide/external/InterviewGuide/public/favicon.svg",
+    "_sources/original/AgentGuide/external/ai-research-ebook/src/assets/logo.svg",
+    "_sources/original/AgentGuide/external/ai-research-ebook/src/assets/houston.webp",
+    "_sources/original/AgentGuide/external/ai-research-ebook/public/logo.svg"
+  ]
+}

@@ -1,0 +1,2 @@
+# This example uses only the Python standard library.
+# Tested with Python 3.10+.

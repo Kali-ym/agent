@@ -1,0 +1,107 @@
+<svg viewBox="0 0 1120 720" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', sans-serif; }
+    .title { fill: #f8fafc; font-size: 20px; font-weight: 700; }
+    .subtitle { fill: #94a3b8; font-size: 11px; }
+    .box-title { fill: #ffffff; font-size: 13px; font-weight: 700; text-anchor: middle; }
+    .box-sub { fill: #cbd5e1; font-size: 10px; text-anchor: middle; }
+    .small { fill: #94a3b8; font-size: 9px; text-anchor: middle; }
+    .label { fill: #e2e8f0; font-size: 10px; font-weight: 600; text-anchor: middle; }
+    .note { fill: #cbd5e1; font-size: 10px; }
+  </style>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrow-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="720" fill="#0f172a"/>
+  <rect width="1120" height="720" fill="url(#grid)"/>
+
+  <text x="40" y="46" class="title">AgentGuide Learning Map</text>
+  <text x="40" y="66" class="subtitle">从概念认知到项目交付：workflow -> agent loop -> tools -> context -> eval -> resume</text>
+
+  <rect x="40" y="104" width="1040" height="196" rx="12" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="58" y="126" fill="#22d3ee" font-size="11" font-weight="700">Stage 0-2: 建立最小闭环</text>
+
+  <g>
+    <rect x="80" y="160" width="160" height="76" rx="6" fill="#0f172a"/>
+    <rect x="80" y="160" width="160" height="76" rx="6" fill="rgba(8,51,68,0.42)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="160" y="190" class="box-title">Concept Map</text>
+    <text x="160" y="209" class="box-sub">chatbot / workflow / agent</text>
+  </g>
+  <g>
+    <rect x="300" y="160" width="160" height="76" rx="6" fill="#0f172a"/>
+    <rect x="300" y="160" width="160" height="76" rx="6" fill="rgba(6,78,59,0.42)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="380" y="190" class="box-title">Minimal Loop</text>
+    <text x="380" y="209" class="box-sub">observe -> act -> observe</text>
+  </g>
+  <g>
+    <rect x="520" y="160" width="160" height="76" rx="6" fill="#0f172a"/>
+    <rect x="520" y="160" width="160" height="76" rx="6" fill="rgba(120,53,15,0.32)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="600" y="190" class="box-title">Tool Design</text>
+    <text x="600" y="209" class="box-sub">schema / errors / permission</text>
+  </g>
+  <g>
+    <rect x="740" y="160" width="160" height="76" rx="6" fill="#0f172a"/>
+    <rect x="740" y="160" width="160" height="76" rx="6" fill="rgba(76,29,149,0.42)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="820" y="190" class="box-title">Context</text>
+    <text x="820" y="209" class="box-sub">state / memory / retrieval</text>
+  </g>
+
+  <path d="M 245 198 L 292 198" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M 465 198 L 512 198" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M 685 198 L 732 198" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="340" width="1040" height="226" rx="12" fill="none" stroke="#34d399" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="58" y="362" fill="#34d399" font-size="11" font-weight="700">Stage 3-6: 做成可展示项目</text>
+
+  <g>
+    <rect x="94" y="408" width="180" height="86" rx="6" fill="#0f172a"/>
+    <rect x="94" y="408" width="180" height="86" rx="6" fill="rgba(59,130,246,0.32)" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="184" y="438" class="box-title">Trace & Replay</text>
+    <text x="184" y="457" class="box-sub">JSONL / span / artifacts</text>
+    <text x="184" y="474" class="small">失败后能复盘</text>
+  </g>
+  <g>
+    <rect x="344" y="408" width="180" height="86" rx="6" fill="#0f172a"/>
+    <rect x="344" y="408" width="180" height="86" rx="6" fill="rgba(6,78,59,0.42)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="434" y="438" class="box-title">Eval Harness</text>
+    <text x="434" y="457" class="box-sub">20+ cases / metrics</text>
+    <text x="434" y="474" class="small">证明不是偶然成功</text>
+  </g>
+  <g>
+    <rect x="594" y="408" width="180" height="86" rx="6" fill="#0f172a"/>
+    <rect x="594" y="408" width="180" height="86" rx="6" fill="rgba(136,19,55,0.42)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="684" y="438" class="box-title">Safety</text>
+    <text x="684" y="457" class="box-sub">sandbox / HITL / secrets</text>
+    <text x="684" y="474" class="small">高风险动作要收口</text>
+  </g>
+  <g>
+    <rect x="844" y="408" width="180" height="86" rx="6" fill="#0f172a"/>
+    <rect x="844" y="408" width="180" height="86" rx="6" fill="rgba(120,53,15,0.32)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="934" y="438" class="box-title">Portfolio</text>
+    <text x="934" y="457" class="box-sub">README / demo / resume</text>
+    <text x="934" y="474" class="small">把项目讲清楚</text>
+  </g>
+
+  <path d="M 184 300 L 184 400" stroke="#22d3ee" stroke-width="1.8" marker-end="url(#arrow-cyan)"/>
+  <path d="M 820 238 C 900 274, 934 314, 934 400" fill="none" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrow-emerald)"/>
+  <path d="M 280 451 L 336 451" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M 530 451 L 586 451" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M 780 451 L 836 451" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <rect x="110" y="604" width="900" height="58" rx="8" fill="#0f172a"/>
+  <rect x="110" y="604" width="900" height="58" rx="8" fill="rgba(30,41,59,0.65)" stroke="#94a3b8" stroke-width="1"/>
+  <text x="132" y="628" class="note">项目标准：能运行、能追踪、能评测、能复盘、能解释 trade-off。</text>
+  <text x="132" y="648" class="note">推荐落点：Paper Agent / Travel Agent / Web Agent / Multimodal RAG。</text>
+</svg>

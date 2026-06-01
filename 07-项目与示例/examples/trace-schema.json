@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentTraceStep",
+  "type": "object",
+  "required": [
+    "run_id",
+    "step_id",
+    "timestamp",
+    "task",
+    "action",
+    "observation",
+    "metrics"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "description": "Unique id for one agent run."
+    },
+    "step_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task": {
+      "type": "string"
+    },
+    "context_summary": {
+      "type": "string",
+      "description": "Short summary of what was sent to the model. Do not store secrets."
+    },
+    "action": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["tool_call", "final_answer", "ask_human", "reflection"]
+        },
+        "tool_name": {
+          "type": ["string", "null"]
+        },
+        "args": {
+          "type": "object"
+        },
+        "reason_summary": {
+          "type": "string"
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "data_summary": {
+          "type": "string"
+        },
+        "error": {
+          "type": ["string", "null"]
+        },
+        "retryable": {
+          "type": ["boolean", "null"]
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "latency_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "input_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimated_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

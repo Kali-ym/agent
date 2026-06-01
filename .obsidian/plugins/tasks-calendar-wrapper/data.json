@@ -1,0 +1,59 @@
+{
+  "openViewOnStartup": true,
+  "filterEmpty": true,
+  "excludePaths": [],
+  "includePaths": [],
+  "useIncludeTags": false,
+  "taskIncludeTags": [],
+  "fileIncludeTags": [],
+  "useExcludeTags": false,
+  "taskExcludeTags": [],
+  "fileExcludeTags": [],
+  "styles": [
+    "style1"
+  ],
+  "dailyNoteFolder": "日记簿/2025-10",
+  "dailyNoteFormat": "YYYY-MM-DD",
+  "sectionForNewTasks": "## 待办事项",
+  "hideTags": [],
+  "forward": true,
+  "sort": "(t1, t2) => t1.order <= t2.order ? -1 : 1",
+  "taskStatusOrder": [
+    "overdue",
+    "due",
+    "scheduled",
+    "start",
+    "process",
+    "unplanned",
+    "done",
+    "cancelled"
+  ],
+  "dateFormat": "dddd, MMM, D",
+  "inbox": "Inbox.md",
+  "taskFiles": [
+    ""
+  ],
+  "tagColorPalette": {
+    "#TODO": "#339988",
+    "#TEST": "#998877"
+  },
+  "useCounters": true,
+  "counterBehavior": "Filter",
+  "useQuickEntry": true,
+  "entryPosition": "today",
+  "useYearHeader": true,
+  "useRelative": true,
+  "useRecurrence": true,
+  "usePriority": true,
+  "useTags": true,
+  "useFileBadge": true,
+  "useSection": true,
+  "hideStatusTasks": [
+    "x",
+    "-"
+  ],
+  "defaultTodayFocus": false,
+  "defaultFilters": "",
+  "useBuiltinStyle": true,
+  "convert24HourTimePrefix": false
+}
