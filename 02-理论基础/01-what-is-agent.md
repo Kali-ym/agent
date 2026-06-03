@@ -6,12 +6,12 @@
 
 ## Agent 不等于 Chatbot
 
-| 类型 | 主要能力 | 是否行动 | 典型例子 |
-|:---|:---|:---:|:---|
-| Chatbot | 对话和回答 | 否 | FAQ、知识问答 |
-| Workflow | 按固定步骤处理任务 | 有，但流程固定 | 分类 -> 检索 -> 生成 -> 审核 |
-| Agent | 模型根据状态选择下一步动作 | 有，路径可变 | 研究助手、Web Agent、Coding Agent |
-| Multi-Agent | 多个 Agent 通过角色或协议协作 | 有 | planner + executor + reviewer |
+| 类型          | 主要能力               |  是否行动   | 典型例子                          |
+| :---------- | :----------------- | :-----: | :---------------------------- |
+| Chatbot     | 对话和回答              |    否    | FAQ、知识问答                      |
+| Workflow    | 按固定步骤处理任务          | 有，但流程固定 | 分类 -> 检索 -> 生成 -> 审核          |
+| Agent       | 模型根据状态选择下一步动作      | 有，路径可变  | 研究助手、Web Agent、Coding Agent   |
+| Multi-Agent | 多个 Agent 通过角色或协议协作 |    有    | planner + executor + reviewer |
 
 Anthropic 在 Agent 工程实践中强调：很多任务用 workflow 更稳，只有当任务路径难以提前写死、需要模型动态决策时，才需要更自主的 Agent。
 
