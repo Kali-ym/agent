@@ -1,6 +1,6 @@
 # DeepSeek 系列完整深度笔记
 
-> 覆盖范围：DeepSeek-V1 → V2 → V3 → R1 → Prover-V2 → V3.2 → DualPath → Engram
+> 覆盖范围：DeepSeek-V1 → V2 → V3 → R1 → Prover-V2 → V3.2 → DualPath → Engram → V4
 > 学习方式：从基础概念到工程实践，从原理到前沿
 
 ---
@@ -16,6 +16,7 @@
 7. [DeepSeek-V3.2：稀疏注意力的探索](#7-deepseek-v32)
 8. [DualPath：榨干每一块闲置网卡的带宽](#8-dualpath)
 9. [DeepSeek Engram：让大模型学会查字典](#9-deepseek-engram)
+10. [DeepSeek-V4：百万上下文与高效长程智能](#10-deepseek-v4)
 
 ---
 
@@ -2693,11 +2694,518 @@ PCIe传输：    [Engram嵌入→GPU(L2)]             [Engram嵌入→GPU(L15)]
 
 ---
 
+## 10. DeepSeek-V4
+
+### 10.1 定位：百万上下文时代的高效长程智能
+
+**论文名称**：DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence
+
+DeepSeek-V4 是 DeepSeek 系列从“高效 MoE + 推理增强”进一步走向“百万 token 长上下文 + 长程 Agent 任务”的版本。
+
+这一代的核心目标不是单纯堆参数，而是解决一个非常现实的问题：
+
+```
+推理模型越来越依赖 test-time scaling
+Agent 任务越来越长
+代码仓库、论文集合、日志、网页轨迹都越来越大
+
+但普通 Attention 在超长上下文下成本爆炸：
+  计算量高
+  KV Cache 大
+  延迟和显存难以承受
+```
+
+V4 的主线可以概括为：
+
+> 保留 DeepSeekMoE 的稀疏计算路线，同时重构长上下文 Attention，让百万 token 上下文变成常规能力，而不是展示型 demo。
+
+### 10.2 两个版本：Pro 与 Flash
+
+DeepSeek-V4 系列包含两个主要 MoE 模型：
+
+| 模型                | 总参数  | 激活参数 | 上下文长度     | 定位                    |
+| ----------------- | ---- | ---- | --------- | --------------------- |
+| DeepSeek-V4-Pro   | 1.6T | 49B  | 1M tokens | 高能力，复杂推理、代码、Agent 工作流 |
+| DeepSeek-V4-Flash | 284B | 13B  | 1M tokens | 高性价比，高吞吐、日常任务、产品主路径   |
+
+这不是简单“大模型 vs 小模型”，而是两条产品路线：
+
+```
+Pro：更强知识、更强复杂推理、更强长程 Agent
+Flash：更低成本、更高吞吐、适合大规模调用
+```
+
+在工程上，最合理的用法不是无脑全上 Pro，而是做路由：
+
+```text
+简单问答 / 摘要 / 分类 / 轻量抽取
+  → Flash Non-Think
+
+复杂推理 / 编程 / 长文档分析 / 多工具 Agent
+  → Pro Think High 或 Pro Think Max
+
+高并发产品路径
+  → Flash 为主，Pro 兜底
+```
+
+### 10.3 V4 从 V3/V3.2 继承了什么
+
+DeepSeek-V4 没有推翻前几代，而是在 V3/V3.2 的基础上继续迭代。
+
+| 继承设计 | 作用 |
+|----------|------|
+| DeepSeekMoE | 继续使用细粒度路由专家 + 共享专家 |
+| MTP | 继续使用 Multi-Token Prediction，提高训练和推理效率 |
+| 辅助 Loss-Free 负载均衡 | 延续 V3 的专家均衡路线 |
+| DSA 思路 | V3.2 的稀疏注意力继续成为长上下文基础之一 |
+
+可以把 V4 看成：
+
+```text
+V3 的 MoE 主体
+  + V3.2 的稀疏注意力方向
+  + 更强的长上下文压缩机制
+  + 更稳定的残差连接
+  + 更激进的训练/推理系统优化
+```
+
+### 10.4 架构升级一：Hybrid Attention = CSA + HCA
+
+V4 最重要的架构变化是混合注意力：**CSA + HCA**。
+
+它解决的是百万 token 场景下的核心瓶颈：普通 Attention 需要保存和访问大量 KV Cache，成本会随上下文增长迅速变得不可接受。
+
+#### CSA：Compressed Sparse Attention
+
+CSA 可以理解成：先压缩，再稀疏选择。
+
+```
+原始 KV 序列
+  → 每 m 个 token 压缩成一个 KV entry
+  → 得到更短的压缩 KV 序列
+  → 用 Lightning Indexer / sparse selector 选择 Top-K 相关块
+  → 只对少量相关压缩块做核心 Attention
+```
+
+它做了两层降本：
+
+1. **压缩长度**：多个 token 合并成一个压缩表示。
+2. **稀疏访问**：不是所有压缩块都看，只看 Top-K 相关块。
+
+类比：
+
+```
+普通 Attention：把 100 万页资料全部摊开逐页看
+CSA：先把资料压成章节摘要，再只打开最相关的章节
+```
+
+CSA 适合需要在超长上下文里定位关键信息的场景，比如：
+
+- 长代码仓库定位 bug。
+- 多篇论文对比。
+- 大量日志排查。
+- 长网页轨迹回溯。
+- Agent 多轮历史中的关键证据定位。
+
+#### HCA：Heavily Compressed Attention
+
+HCA 可以理解成更激进的压缩版本：
+
+```
+原始 KV 序列
+  → 每 m' 个 token 压缩成一个 KV entry（m' 远大于 m）
+  → 保持 dense attention
+```
+
+它不强调 Top-K 稀疏选择，而是强调“压得更狠”。
+
+适合处理全局背景信息：
+
+- 文档整体结构。
+- 长任务背景。
+- 大范围上下文摘要。
+- 对全局语境的粗粒度保留。
+
+#### 为什么要混合 CSA 和 HCA
+
+CSA 和 HCA 的分工可以这样理解：
+
+| 机制 | 更像什么 | 擅长 |
+|------|----------|------|
+| CSA | 稀疏检索器 | 找长上下文中的关键局部信息 |
+| HCA | 全局压缩器 | 保留大范围背景和全局语义 |
+
+混合后的目标是：
+
+```
+CSA 保证“能找到关键细节”
+HCA 保证“不会丢掉整体背景”
+两者组合，让 1M 上下文可用且成本可控
+```
+
+### 10.5 百万上下文效率：相比 V3.2 的关键改进
+
+公开技术报告给出的核心效率信号是：在 1M token 上下文场景下，DeepSeek-V4-Pro 相比 DeepSeek-V3.2：
+
+```
+单 token 推理 FLOPs：约为 V3.2 的 27%
+KV Cache：约为 V3.2 的 10%
+```
+
+DeepSeek-V4-Flash 更进一步：
+
+```
+单 token 推理 FLOPs：约为 V3.2 的 10%
+KV Cache：约为 V3.2 的 7%
+```
+
+这个数字的意义很大：
+
+```
+长上下文以前是“能不能塞进去”
+V4 关注的是“塞进去以后还能不能高效推理”
+```
+
+对于 Agent 来说，这会直接影响：
+
+- 更长的工具轨迹是否可保留。
+- 大型代码仓库是否能整体进入上下文。
+- 多文档任务是否减少外部检索次数。
+- 长任务是否能做更深 test-time scaling。
+- 是否能把更多历史状态留给模型直接处理。
+
+但注意：1M context 不等于可以无脑塞所有内容。上下文越长，干扰也越强，仍然需要 context engineering。
+
+### 10.6 架构升级二：mHC 强化残差连接
+
+V4 引入了 **Manifold-Constrained Hyper-Connections（mHC）**，用来增强传统残差连接。
+
+普通残差连接的直觉：
+
+```
+下一层输入 = 当前层输出 + 原始残差信息
+```
+
+mHC 的目标是让跨层信号传播更稳定，尤其是在更深、更复杂、更长上下文的模型里。
+
+它的核心思想：
+
+```
+把残差流扩展成多条通道
+用受约束的映射矩阵管理通道之间的信息流
+通过流形约束保证信号传播稳定
+```
+
+为什么重要？
+
+```
+模型越深、上下文越长、训练越复杂
+→ 信号传播越容易不稳定
+→ 残差路径不只是“加一下”这么简单
+→ 需要更强的跨层信息组织方式
+```
+
+mHC 可以理解为：给深层 Transformer 的残差通道加了一个更稳的“交通调度系统”。
+
+### 10.7 架构升级三：Muon Optimizer
+
+DeepSeek-V4 使用 **Muon optimizer** 来提升训练收敛速度和稳定性。
+
+在超大规模训练里，优化器不是小细节，而是直接影响：
+
+- 是否能稳定训练。
+- 是否能更快收敛。
+- 是否能减少训练不稳定带来的浪费。
+- 是否能配合 MoE、长上下文、mHC 等复杂结构。
+
+可以把 V4 的训练优化理解成：
+
+```
+架构上：CSA/HCA/mHC 降低长上下文和深层训练难度
+优化器上：Muon 提升收敛稳定性
+系统上：融合 kernel、量化、并行策略降低训练/推理成本
+```
+
+### 10.8 MoE 路由的小变化
+
+V4 继续使用 DeepSeekMoE，但有一些关键调整。
+
+#### 亲和度函数变化
+
+V3 中路由亲和度曾使用 sigmoid 路线；V4 中公开资料提到将 affinity score 的激活从 Sigmoid 调整为 **Sqrt(Softplus)**。
+
+直觉上：
+
+```
+Sigmoid：输出被压在 0-1，容易饱和
+Sqrt(Softplus)：更平滑，正值范围更开放
+```
+
+它的目标仍然是让专家路由更稳定、更可训练。
+
+#### 初始层引入 Hash Routing MoE
+
+V4 将初始若干 Transformer block 里的 dense FFN 替换成带 Hash routing 的 MoE 层。
+
+Hash routing 的特点：
+
+```
+token id → hash function → fixed expert
+```
+
+和普通动态路由相比：
+
+| 路由方式 | 特点 |
+|----------|------|
+| 动态路由 | 根据 hidden state 决定专家，灵活但调度更复杂 |
+| Hash routing | 根据 token id 固定路由，确定性强，调度简单 |
+
+这和 Engram 的“确定性查表”思想有一点相似：能确定的事情尽量确定化，把不确定计算留给真正需要的部分。
+
+### 10.9 精度与系统优化：FP4、融合 Kernel、TileLang
+
+V4 的系统工程也很重要。
+
+公开资料里提到的几个方向：
+
+| 优化 | 作用 |
+|------|------|
+| FP4 expert weights | MoE 专家参数用更低精度，降低存储和带宽压力 |
+| FP4 indexer QK path | 长上下文索引路径也做低精度优化 |
+| FP8 mixed precision | 其他大部分参数保持较高效的混合精度 |
+| MoE fused kernel | 让计算、通信、访存尽量重叠 |
+| TileLang DSL | 在开发效率和运行效率之间折中 |
+| deterministic kernels | 保证训练和推理可复现 |
+| heterogeneous KV cache | 异构 KV Cache 与磁盘存储策略，支持共享前缀复用 |
+
+这延续了 DeepSeek 一贯的系统哲学：
+
+```
+不是只靠模型结构省钱
+还要在 kernel、并行、量化、缓存、存储路径上一起省
+```
+
+尤其是 1M context 场景，KV Cache 不只是显存问题，也会变成存储系统和复用策略问题。
+
+### 10.10 预训练与后训练流程
+
+V4 的训练数据规模继续扩大：
+
+```
+DeepSeek-V4-Flash：约 32T tokens
+DeepSeek-V4-Pro：约 33T tokens
+```
+
+后训练采用两阶段范式：
+
+```text
+第一阶段：领域专家独立培养
+  - 数学专家
+  - 代码专家
+  - Agent 专家
+  - 指令跟随专家
+  - 其他领域专家
+
+每个专家：
+  Base Model
+    → SFT
+    → GRPO / RL
+    → domain-aligned expert
+
+第二阶段：统一模型整合
+  - 通过 on-policy distillation
+  - 让统一模型学习多个专家的能力
+  - 最终得到单一可用模型
+```
+
+这和“一个模型直接吃所有后训练数据”的方式不同。
+
+它更像：
+
+```
+先把各个专项能力练到位
+再把专项能力蒸馏进一个统一模型
+```
+
+对 Agent 很重要，因为 Agent 能力不是单一能力，而是：
+
+- 指令理解。
+- 规划。
+- 工具调用。
+- 代码能力。
+- 长上下文检索。
+- 失败恢复。
+- 结构化输出。
+
+分专项训练再统一整合，比把所有数据混在一起更容易控制能力边界。
+
+### 10.11 三种推理模式
+
+V4 Instruct 模型支持不同 reasoning effort 模式。
+
+| 模式 | 特点 | 适合场景 |
+|------|------|----------|
+| Non-Think | 快速、低成本、直觉式回答 | 日常问答、简单摘要、低风险任务 |
+| Think High | 更强逻辑分析，速度较慢 | 编程、规划、数学、多步任务 |
+| Think Max | 最大推理预算 | 高难推理、复杂 Agent、边界能力探索 |
+
+这和 Agent 工程里的路由非常相关。
+
+推荐策略：
+
+```text
+默认不要 Think Max
+先用 Non-Think / Flash 处理简单任务
+检测复杂度后升级到 Think High
+只有高价值、高难度任务才启用 Think Max
+```
+
+否则会出现：
+
+```
+任务很简单，但模型长时间思考
+→ 成本高
+→ 延迟高
+→ 用户体验差
+```
+
+### 10.12 Benchmark 信号
+
+公开评测中，V4-Pro-Max 在多个方向有明显提升。
+
+几个关键读法：
+
+| 方向 | 信号 |
+|------|------|
+| 知识 | V4-Pro 在 MMLU、SimpleQA、FACTS 等知识类任务上比 V3.2 更强 |
+| 代码 | LiveCodeBench、Codeforces、SWE Verified 表现很强 |
+| 数学推理 | HMMT、IMOAnswerBench、GPQA 等高难任务增强明显 |
+| 长上下文 | MRCR 1M、CorpusQA 1M 等百万上下文任务成为重点 |
+| Agent | Terminal Bench、SWE、BrowseComp、MCPAtlas、Toolathlon 等任务表现接近前沿闭源模型 |
+
+注意这里的解读重点不是“哪个榜单第一”，而是：
+
+```
+V4 的能力重心明显指向：
+  长上下文
+  代码
+  Agentic workflow
+  高预算推理
+  工具使用
+```
+
+这和 DeepSeek 从 V3.2、DualPath、Engram 到 V4 的路线是一致的：围绕长程任务和高效推理持续压缩成本。
+
+### 10.13 V4 对 Agent 工程的意义
+
+V4 最值得 Agent 开发者关注的，不是单次聊天质量，而是长程任务能力。
+
+#### 1M context 对 Agent 的影响
+
+过去 Agent 常见做法：
+
+```
+长任务历史太长
+  → 摘要
+  → RAG
+  → memory 分层
+  → 只保留最近轨迹
+```
+
+V4 之后可以更激进地保留：
+
+- 更多工具调用历史。
+- 更多文件内容。
+- 更多日志和网页轨迹。
+- 更多跨文档证据。
+- 更多计划、检查点和失败记录。
+
+但这不等于上下文工程消失。更现实的结论是：
+
+```
+上下文窗口变大
+  → 可选策略更多
+  → 但排序、压缩、证据选择仍然关键
+```
+
+#### 对 Coding Agent
+
+V4 的长上下文和代码能力适合：
+
+- 大型仓库阅读。
+- 多文件 bug 修复。
+- 长日志 + 源码联合分析。
+- 复杂 PR review。
+- SWE 类任务。
+
+但仍然需要：
+
+- 工具 trace。
+- 测试验证。
+- diff 约束。
+- 防止无关文件修改。
+
+#### 对 Research / Paper Agent
+
+百万上下文使多篇论文、长报告、引用链更容易进入同一上下文。
+
+适合：
+
+- 多论文综述。
+- 长文档交叉引用。
+- 大规模证据对比。
+- 复杂问题的长程推理。
+
+但仍然需要：
+
+- evidence.jsonl。
+- 引用准确率评测。
+- 去重和来源质量控制。
+
+#### 对 Enterprise Agent
+
+长上下文可以承载更多业务材料，但企业 Agent 仍然不能无脑塞数据。
+
+必须保留：
+
+- 权限过滤。
+- 审计日志。
+- 数据隔离。
+- 工具白名单。
+- 人工确认。
+
+### 10.14 V4 的核心取舍
+
+V4 强，但不是所有任务都适合用最大模式。
+
+| 场景 | 推荐 |
+|------|------|
+| 高频客服、简单摘要 | V4-Flash Non-Think |
+| 普通代码解释、结构化抽取 | V4-Flash High 或 V4-Pro Non-Think |
+| 复杂代码修复、长文档问答 | V4-Pro High |
+| 高难数学、复杂 Agent、长程规划 | V4-Pro Max |
+| 成本敏感产品路径 | Flash 优先，Pro 兜底 |
+
+工程判断标准：
+
+```text
+先用 eval 确认任务难度
+再决定 Flash/Pro
+再决定 Non-Think/High/Max
+不要用模型大小替代路由策略
+```
+
+### 10.15 V4 的一句话总结
+
+DeepSeek-V4 的本质不是“又一个更大的 MoE”，而是一次围绕百万上下文的系统级升级：用 CSA/HCA 降低长上下文 Attention 成本，用 mHC 稳定深层信号传播，用 Muon 和系统优化提升训练/推理效率，再通过领域专家后训练和 on-policy distillation 把代码、推理、Agent、长上下文能力整合到 Pro/Flash 两条模型路线中。
+
+---
+
 ## 总结：DeepSeek的核心设计哲学
 
 ### 贯穿始终的主线
 
-从V1到Engram，DeepSeek的核心哲学可以归纳为：
+从V1到V4，DeepSeek的核心哲学可以归纳为：
 
 **"在给定硬件约束下，通过软件层面的精巧设计，把每一分计算资源、每一分带宽、每一分显存都用在刀刃上。"**
 
@@ -2707,25 +3215,31 @@ PCIe传输：    [Engram嵌入→GPU(L2)]             [Engram嵌入→GPU(L15)]
 1. 计算稀疏化（不是所有参数都参与每次计算）
    V2/V3：MoE细粒度专家切分 + 共享专家
    V3.2：DSA稀疏注意力
+   V4：CSA/HCA混合注意力，把长上下文计算进一步稀疏化和压缩
 
 2. 存储压缩（不是所有状态都需要完整缓存）
    V2：MLA低秩KV-Cache压缩（64倍压缩）
    V1：GQA多头共享
+   V4：百万上下文下 KV Cache 相比 V3.2 大幅降低
 
 3. 带宽利用（不让任何一块网卡空转）
    DualPath：池化全集群存储带宽
+   V4：MoE fused kernel、异构 KV Cache、共享前缀复用
 
 4. 任务分工（不同任务走最适合的路径）
    Engram：知识检索走查表，推理走深层计算
+   V4：Pro/Flash + Non-Think/High/Max 形成能力与成本分层
 
 5. 训练效率（不浪费一个训练样本）
    V3 MTP：每个样本同时学多个预测目标
    R1 GRPO：去掉Value Model，降低训练成本
+   V4：Muon优化器 + 领域专家培养 + on-policy distillation
 
 6. 渐进式设计（不一步到位，迭代优化）
    V1→V2：引入MoE和MLA
    V2→V3：消除辅助Loss副作用
    V3→V3.2：探索稀疏注意力
+   V3.2→V4：把稀疏注意力推进到百万上下文规模
    每一步都解决了上一步的具体痛点
 ```
 
@@ -2749,6 +3263,8 @@ DeepSeek-V3.2：DSA稀疏注意力 + Lightning Indexer
 DualPath：存储带宽池化 + Virtual Lane隔离
      ↓
 Engram：条件记忆 + O(1)查表 + U型Scaling Law
+     ↓
+DeepSeek-V4：Pro/Flash双路线 + CSA/HCA混合注意力 + mHC + Muon + 1M上下文
 ```
 
 ---
